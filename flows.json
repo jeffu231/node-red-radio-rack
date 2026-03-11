@@ -1847,23 +1847,6 @@
         "wires": []
     },
     {
-        "id": "ef44d27b11f6b4a0",
-        "type": "debug",
-        "z": "a4566cca18e41e03",
-        "name": "Output To KAT500",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2870,
-        "y": 860,
-        "wires": []
-    },
-    {
         "id": "992a592aba2ef1ad",
         "type": "mqtt out",
         "z": "a4566cca18e41e03",
@@ -1900,65 +1883,6 @@
                 "992a592aba2ef1ad"
             ]
         ]
-    },
-    {
-        "id": "f8eed369c2dce876",
-        "type": "mqtt in",
-        "z": "a4566cca18e41e03",
-        "name": "Flex Ant 1 Freq",
-        "topic": "9_barbarotto/hamradio/flexradio/radios/2621-1104-6600-0756/client/+/txslice/+/txant/ANT1/freq",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "a9add877a0594643",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 1580,
-        "y": 1120,
-        "wires": [
-            [
-                "5389ba772999c688",
-                "6403de72fb37e366"
-            ]
-        ]
-    },
-    {
-        "id": "5389ba772999c688",
-        "type": "function",
-        "z": "a4566cca18e41e03",
-        "name": "Build Command",
-        "func": "\nvar freqInHz = msg.payload * 1000;\nvar command = \";MT \" + freqInHz + \";\";\n\nmsg = {};\nmsg.payload = command;\nmsg._msgid = \"\";\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1880,
-        "y": 1120,
-        "wires": [
-            [
-                "ae9b847a48411bb7",
-                "ef44d27b11f6b4a0"
-            ]
-        ]
-    },
-    {
-        "id": "6403de72fb37e366",
-        "type": "debug",
-        "z": "a4566cca18e41e03",
-        "name": "Band Payload",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1800,
-        "y": 1200,
-        "wires": []
     },
     {
         "id": "19e744c990360a01",
@@ -2073,6 +1997,129 @@
         "wires": []
     },
     {
+        "id": "a897b0b46ab40878",
+        "type": "mqtt in",
+        "z": "a4566cca18e41e03",
+        "name": "Flex Slice Ant 1 Freq",
+        "topic": "9_barbarotto/hamradio/flexradio/radios/2621-1104-6600-0756/client/+/tx_info",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a9add877a0594643",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1590,
+        "y": 1200,
+        "wires": [
+            [
+                "d8acc694a2d46604",
+                "ac45e367784f23c4"
+            ]
+        ]
+    },
+    {
+        "id": "d8acc694a2d46604",
+        "type": "debug",
+        "z": "a4566cca18e41e03",
+        "name": "tx_info Payload",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1760,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "0d58aa77c9e38b04",
+        "type": "function",
+        "z": "a4566cca18e41e03",
+        "name": "Build Command",
+        "func": "\nvar freqInHz = msg.payload.freq * 1000;\nvar command = \";MT \" + freqInHz + \";\";\n\nmsg = {};\nmsg.payload = command;\nmsg._msgid = \"\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1980,
+        "y": 1200,
+        "wires": [
+            [
+                "0d7b26aff2a7b0c4",
+                "ae9b847a48411bb7"
+            ]
+        ]
+    },
+    {
+        "id": "ac45e367784f23c4",
+        "type": "switch",
+        "z": "a4566cca18e41e03",
+        "name": "",
+        "property": "payload.txAnt",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ANT1",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1810,
+        "y": 1200,
+        "wires": [
+            [
+                "0d58aa77c9e38b04"
+            ]
+        ]
+    },
+    {
+        "id": "0d7b26aff2a7b0c4",
+        "type": "debug",
+        "z": "a4566cca18e41e03",
+        "name": "Output Alt To KAT500",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2200,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "6e4a7dc69f603d4b",
+        "type": "mqtt in",
+        "z": "a4566cca18e41e03",
+        "name": "Flex Radio Level Ant 1 Freq",
+        "topic": "9_barbarotto/hamradio/flexradio/radios/2621-1104-6600-0756/tx_info",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a9add877a0594643",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1560,
+        "y": 1160,
+        "wires": [
+            [
+                "ac45e367784f23c4",
+                "d8acc694a2d46604"
+            ]
+        ]
+    },
+    {
         "id": "2b1d74d4.e3329c",
         "type": "function",
         "z": "a639e598.c31358",
@@ -2178,7 +2225,8 @@
             ],
             [
                 "b3ac20c3.6a62c",
-                "4d6c0be2.812c84"
+                "4d6c0be2.812c84",
+                "d38df9f4ddb228ae"
             ],
             [
                 "cb2abcd0.7d9aa"
@@ -2418,6 +2466,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
+        "libs": [],
         "x": 810,
         "y": 700,
         "wires": [
@@ -4085,6 +4134,23 @@
         "statusType": "auto",
         "x": 1500,
         "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "d38df9f4ddb228ae",
+        "type": "debug",
+        "z": "a639e598.c31358",
+        "name": "KPA500 SWR",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 780,
         "wires": []
     },
     {
@@ -7883,7 +7949,7 @@
         "type": "debug",
         "z": "ae862ea590b7d56f",
         "name": "Rig 1 Post Payload",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -7900,7 +7966,7 @@
         "type": "debug",
         "z": "ae862ea590b7d56f",
         "name": "Rig 1 Response",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
