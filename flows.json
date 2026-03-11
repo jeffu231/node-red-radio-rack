@@ -5912,7 +5912,7 @@
             },
             {
                 "t": "cont",
-                "v": "/mainfan",
+                "v": "/main_fan",
                 "vt": "str"
             }
         ],
