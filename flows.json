@@ -4836,7 +4836,7 @@
         "type": "function",
         "z": "a639e598.c31358",
         "name": "Serial",
-        "func": "var serial = msg.payload.slice(2);\nflow.set(\"unitSerial\", serial);\nmsg.payload = \"open\";\nmsg.topic = \"control\";\nreturn msg;\n",
+        "func": "var serial = msg.payload.slice(2,-1);\nflow.set(\"unitSerial\", serial);\nmsg.payload = \"open\";\nmsg.topic = \"control\";\nmsg.serial = serial;\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
