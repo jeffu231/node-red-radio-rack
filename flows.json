@@ -531,11 +531,16 @@
                 "t": "cont",
                 "v": "FLT",
                 "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "SN",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 8,
+        "outputs": 9,
         "x": 670,
         "y": 680,
         "wires": [
@@ -563,6 +568,9 @@
             ],
             [
                 "e6efcd83593bb2d6"
+            ],
+            [
+                "fa29e62a7a81b46f"
             ]
         ]
     },
@@ -591,18 +599,19 @@
         "type": "function",
         "z": "a4566cca18e41e03",
         "name": "Parse BYPASS",
-        "func": "msg.payload = msg.payload.substr(3,1)\n\nreturn msg;\n",
+        "func": "msg.payload = msg.payload.substr(3,1);\nmsg.field = 'bypass';\n\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 400,
+        "y": 340,
         "wires": [
             [
                 "ea40dd34719b11e8",
-                "dd85afc29b144868"
+                "dd85afc29b144868",
+                "d80f07f58f4ac101"
             ]
         ]
     },
@@ -611,7 +620,7 @@
         "type": "function",
         "z": "a4566cca18e41e03",
         "name": "Power",
-        "func": "msg.payload = parseInt(msg.payload.substr(2,2))\n\nreturn msg;\n",
+        "func": "msg.payload = parseInt(msg.payload.substr(2,1));\nmsg.field = 'power';\nmsg.retain = true;\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -621,7 +630,8 @@
         "y": 560,
         "wires": [
             [
-                "921b425bb4eb478d"
+                "c8c679682c210262",
+                "2ab1d49850962d33"
             ]
         ]
     },
@@ -630,7 +640,7 @@
         "type": "function",
         "z": "a4566cca18e41e03",
         "name": "Watts",
-        "func": "vlt = parseInt(msg.payload.substr(5,4)) \npw = Math.pow(vlt,2) / 50  // calculate power into 50ohms\npw = pw / 129  // correct for scale\n\nif(pw < 1) pw = 0;\nmsg.payload = pw\nreturn msg;\n",
+        "func": "vlt = parseInt(msg.payload.substr(5,4)) \npw = Math.pow(vlt,2) / 50  // calculate power into 50ohms\npw = pw / 129  // correct for scale\n\nif(pw < 1) pw = 0;\nmsg.payload = pw\nmsg.field = 'rf_power';\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -689,7 +699,7 @@
         "type": "function",
         "z": "a4566cca18e41e03",
         "name": "Band",
-        "func": "var bandcode = msg.payload;\nvar band = '';\nswitch(bandcode) {\ncase 0:\n    band = \"160M\";\nbreak;\ncase 1:\n    band = \"80M\";\nbreak;\ncase 2:\n    band = \"60M\";\nbreak;\ncase 3:\n    band = \"40M\";\nbreak;\ncase 4:\n    band = \"30M\";\nbreak;\ncase 5:\n    band = \"20M\";\nbreak;\ncase 6:\n    band = \"17M\";\nbreak;\ncase 7:\n    band = \"15M\";\nbreak;\ncase 8:\n    band = \"12M\";\nbreak;\ncase 9:\n    band = \"10M\";\nbreak;\ncase 10:\n    band = \"6M\";\n}\n\nreturn  {payload: band};\n",
+        "func": "var bandcode = msg.payload;\nvar band = '';\nswitch(bandcode) {\ncase 0:\n    band = \"160M\";\nbreak;\ncase 1:\n    band = \"80M\";\nbreak;\ncase 2:\n    band = \"60M\";\nbreak;\ncase 3:\n    band = \"40M\";\nbreak;\ncase 4:\n    band = \"30M\";\nbreak;\ncase 5:\n    band = \"20M\";\nbreak;\ncase 6:\n    band = \"17M\";\nbreak;\ncase 7:\n    band = \"15M\";\nbreak;\ncase 8:\n    band = \"12M\";\nbreak;\ncase 9:\n    band = \"10M\";\nbreak;\ncase 10:\n    band = \"6M\";\n}\n\nmsg.field = 'band';\nmsg.payload = band;\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -699,7 +709,8 @@
         "y": 760,
         "wires": [
             [
-                "1f25fa907ef4f25e"
+                "1f25fa907ef4f25e",
+                "9365244173fad293"
             ]
         ]
     },
@@ -776,8 +787,8 @@
         "width": 3,
         "height": 1,
         "passthru": false,
-        "decouple": "false",
-        "topic": "KPA500 Power",
+        "decouple": "true",
+        "topic": "",
         "topicType": "str",
         "style": "",
         "onvalue": "true",
@@ -839,13 +850,15 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
+        "libs": [],
         "x": 2000,
         "y": 540,
         "wires": [
             [
                 "549d683a974c5709",
                 "ac1220d6b5415198",
-                "ae9b847a48411bb7"
+                "ae9b847a48411bb7",
+                "8c7c70471002c7fd"
             ]
         ]
     },
@@ -866,7 +879,8 @@
             [
                 "b3ee4c43abfaa681",
                 "f68107a62cdca6f1",
-                "bfa4ebe8e1e29af9"
+                "bfa4ebe8e1e29af9",
+                "a22e23dcfcc8f066"
             ]
         ]
     },
@@ -1002,8 +1016,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 630,
-        "y": 540,
+        "x": 430,
+        "y": 800,
         "wires": []
     },
     {
@@ -1078,7 +1092,7 @@
         "type": "function",
         "z": "a4566cca18e41e03",
         "name": "Mode",
-        "func": "msg.payload = msg.payload.substr(2,1)\n\nreturn msg;\n",
+        "func": "msg.payload = msg.payload.substr(2,1)\nmsg.field = 'mode';\n\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1089,7 +1103,8 @@
         "wires": [
             [
                 "0c90ceb99e1ac3f8",
-                "e72694091949066f"
+                "e72694091949066f",
+                "9365244173fad293"
             ]
         ]
     },
@@ -1365,11 +1380,12 @@
         "z": "a4566cca18e41e03",
         "name": "",
         "controlTopic": "control",
-        "defaultState": "open",
+        "defaultState": "closed",
         "openCmd": "open",
         "closeCmd": "close",
         "toggleCmd": "toggle",
         "defaultCmd": "default",
+        "statusCmd": "",
         "persist": false,
         "x": 2490,
         "y": 300,
@@ -1628,7 +1644,7 @@
         "randomUnits": "seconds",
         "drop": false,
         "outputs": 1,
-        "x": 1020,
+        "x": 1100,
         "y": 600,
         "wires": [
             [
@@ -1690,7 +1706,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1220,
+        "x": 1260,
         "y": 520,
         "wires": [
             [
@@ -1704,11 +1720,12 @@
         "z": "a4566cca18e41e03",
         "name": "",
         "controlTopic": "control",
-        "defaultState": "open",
+        "defaultState": "closed",
         "openCmd": "open",
         "closeCmd": "close",
         "toggleCmd": "toggle",
         "defaultCmd": "default",
+        "statusCmd": "",
         "persist": false,
         "x": 2490,
         "y": 440,
@@ -1808,8 +1825,8 @@
         "id": "3844ec7c.877664",
         "type": "start-up-trigger",
         "z": "a4566cca18e41e03",
-        "x": 1640,
-        "y": 180,
+        "x": 320,
+        "y": 360,
         "wires": [
             []
         ]
@@ -1818,50 +1835,34 @@
         "id": "dd85afc29b144868",
         "type": "debug",
         "z": "a4566cca18e41e03",
-        "name": "",
+        "name": "Bypass",
         "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 300,
+        "x": 1100,
+        "y": 340,
         "wires": []
     },
     {
         "id": "e72694091949066f",
         "type": "debug",
         "z": "a4566cca18e41e03",
-        "name": "",
+        "name": "Mode",
         "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1110,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "992a592aba2ef1ad",
-        "type": "mqtt out",
-        "z": "a4566cca18e41e03",
-        "name": "MQTT KAT500 RF Power",
-        "topic": "9_barbarotto/hamradio/rack01/sensors/kat500/power",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "a9add877a0594643",
-        "x": 1710,
-        "y": 700,
+        "x": 1090,
+        "y": 440,
         "wires": []
     },
     {
@@ -1880,7 +1881,8 @@
         "y": 700,
         "wires": [
             [
-                "992a592aba2ef1ad"
+                "5bfd5e926cea8453",
+                "9365244173fad293"
             ]
         ]
     },
@@ -1897,8 +1899,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1160,
-        "y": 920,
+        "x": 1040,
+        "y": 800,
         "wires": []
     },
     {
@@ -1954,29 +1956,12 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 2170,
-        "y": 700,
-        "wires": [
-            [
-                "ae9b847a48411bb7"
-            ]
-        ]
-    },
-    {
-        "id": "7762570d8238f828",
-        "type": "function",
-        "z": "a4566cca18e41e03",
-        "name": "function 1",
-        "func": "\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1820,
+        "x": 2030,
         "y": 820,
         "wires": [
-            []
+            [
+                "f68107a62cdca6f1"
+            ]
         ]
     },
     {
@@ -1992,8 +1977,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1390,
-        "y": 620,
+        "x": 1350,
+        "y": 660,
         "wires": []
     },
     {
@@ -2051,7 +2036,7 @@
         "wires": [
             [
                 "0d7b26aff2a7b0c4",
-                "ae9b847a48411bb7"
+                "f68107a62cdca6f1"
             ]
         ]
     },
@@ -2116,6 +2101,546 @@
             [
                 "ac45e367784f23c4",
                 "d8acc694a2d46604"
+            ]
+        ]
+    },
+    {
+        "id": "46663b656f21707d",
+        "type": "mqtt out",
+        "z": "a4566cca18e41e03",
+        "name": "Publish KAT500",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a9add877a0594643",
+        "x": 1100,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "fb8990a3fdb4c14b",
+        "type": "change",
+        "z": "a4566cca18e41e03",
+        "name": "Set Base Device Topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "baseTopic",
+                "pt": "flow",
+                "to": "9_barbarotto/hamradio/elecraft/kat500",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 200,
+        "wires": [
+            [
+                "46d964e04bc5fdcb"
+            ]
+        ]
+    },
+    {
+        "id": "46d964e04bc5fdcb",
+        "type": "debug",
+        "z": "a4566cca18e41e03",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f52a8cae11c139cb",
+        "type": "inject",
+        "z": "a4566cca18e41e03",
+        "name": "Startup",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 340,
+        "y": 200,
+        "wires": [
+            [
+                "fb8990a3fdb4c14b",
+                "7d9ccb776301465e",
+                "8bfd56980ad9d6d6"
+            ]
+        ]
+    },
+    {
+        "id": "9365244173fad293",
+        "type": "function",
+        "z": "a4566cca18e41e03",
+        "name": "Pub Field Payload",
+        "func": "const baseTopic = flow.get('baseTopic');\nconst serial = flow.get('unitSerial');\nconst fieldName = msg.field + 'Value';\nconst prevValue = flow.get(fieldName)\nif(msg.payload != prevValue){\n    flow.set(fieldName, msg.payload);\n    msg.topic = baseTopic + '/' + serial + '/' + msg.field; \n    return msg;  \n}\n\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 1160,
+        "wires": [
+            [
+                "e612a9fd101c0fd3",
+                "f2440ca499974bef"
+            ]
+        ]
+    },
+    {
+        "id": "d80f07f58f4ac101",
+        "type": "change",
+        "z": "a4566cca18e41e03",
+        "name": "Convert Bypass Value",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "B",
+                "fromt": "str",
+                "to": "true",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "N",
+                "fromt": "str",
+                "to": "false",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 380,
+        "wires": [
+            [
+                "9365244173fad293"
+            ]
+        ]
+    },
+    {
+        "id": "2ab1d49850962d33",
+        "type": "debug",
+        "z": "a4566cca18e41e03",
+        "name": "Power Switch",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "e612a9fd101c0fd3",
+        "type": "debug",
+        "z": "a4566cca18e41e03",
+        "name": "Pub Payload",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "c8c679682c210262",
+        "type": "change",
+        "z": "a4566cca18e41e03",
+        "name": "Swap 0/1 to bool",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "1",
+                "fromt": "num",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "0",
+                "fromt": "num",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1290,
+        "y": 560,
+        "wires": [
+            [
+                "921b425bb4eb478d",
+                "6767fd0b172babd5",
+                "9365244173fad293"
+            ]
+        ]
+    },
+    {
+        "id": "d7231cfa1481cef1",
+        "type": "inject",
+        "z": "a4566cca18e41e03",
+        "name": ".5 sec",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": ".2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1830,
+        "y": 240,
+        "wires": [
+            [
+                "0eb9c82fc558a6ea"
+            ]
+        ]
+    },
+    {
+        "id": "0eb9c82fc558a6ea",
+        "type": "function",
+        "z": "a4566cca18e41e03",
+        "name": "Power Query",
+        "func": "msg.payload = \";PS;\"\nreturn msg;\n\n//BN = band\n//BYP = Bypass\n//FLT = Fault\n//MD =  Mode\n//ps = Power on/off\n//VSWR = VSWR\n//VSWRB = VSWR in Bypass Mode\n//VFWD = Forward Power Voltage 0-4095",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2010,
+        "y": 240,
+        "wires": [
+            [
+                "e077e6716089895b"
+            ]
+        ]
+    },
+    {
+        "id": "e077e6716089895b",
+        "type": "gate",
+        "z": "a4566cca18e41e03",
+        "name": "",
+        "controlTopic": "control",
+        "defaultState": "open",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "defaultCmd": "default",
+        "statusCmd": "",
+        "persist": false,
+        "x": 2490,
+        "y": 240,
+        "wires": [
+            [
+                "ae9b847a48411bb7"
+            ]
+        ]
+    },
+    {
+        "id": "a22e23dcfcc8f066",
+        "type": "change",
+        "z": "a4566cca18e41e03",
+        "name": "open",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "open",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "control",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2290,
+        "y": 220,
+        "wires": [
+            [
+                "e077e6716089895b"
+            ]
+        ]
+    },
+    {
+        "id": "8c7c70471002c7fd",
+        "type": "change",
+        "z": "a4566cca18e41e03",
+        "name": "close",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "close",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "control",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2290,
+        "y": 180,
+        "wires": [
+            [
+                "e077e6716089895b"
+            ]
+        ]
+    },
+    {
+        "id": "437c03444463e164",
+        "type": "switch",
+        "z": "a4566cca18e41e03",
+        "name": "Power State",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1990,
+        "y": 640,
+        "wires": [
+            [
+                "ac1220d6b5415198",
+                "549d683a974c5709",
+                "8c7c70471002c7fd"
+            ],
+            [
+                "bfa4ebe8e1e29af9",
+                "df03a645d5e2c5a2",
+                "b3ee4c43abfaa681",
+                "a22e23dcfcc8f066"
+            ]
+        ]
+    },
+    {
+        "id": "6767fd0b172babd5",
+        "type": "rbe",
+        "z": "a4566cca18e41e03",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 1810,
+        "y": 640,
+        "wires": [
+            [
+                "437c03444463e164"
+            ]
+        ]
+    },
+    {
+        "id": "7d9ccb776301465e",
+        "type": "function",
+        "z": "a4566cca18e41e03",
+        "name": "Reset flow variables",
+        "func": "\n// Get all keys (names) of variables in the 'default' flow context store (usually memory)\nlet keys = flow.keys(\"default\");\n\n// Loop through and delete each variable\nfor (let i = 0; i < keys.length; i++) {\n    if(keys[i].endsWith(\"Value\")){\n        flow.set(keys[i], undefined, \"default\");\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "34315be9f0700559",
+        "type": "inject",
+        "z": "a4566cca18e41e03",
+        "name": "Serial Query",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": ".5",
+        "topic": "",
+        "payload": ";SN;",
+        "payloadType": "str",
+        "x": 2010,
+        "y": 180,
+        "wires": [
+            [
+                "ae9b847a48411bb7"
+            ]
+        ]
+    },
+    {
+        "id": "fa29e62a7a81b46f",
+        "type": "function",
+        "z": "a4566cca18e41e03",
+        "name": "Serial",
+        "func": "var serial = msg.payload.slice(2);\nflow.set(\"unitSerial\", serial);\nmsg.payload = \"open\";\nmsg.topic = \"control\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1220,
+        "wires": [
+            [
+                "f2440ca499974bef"
+            ]
+        ]
+    },
+    {
+        "id": "f2440ca499974bef",
+        "type": "gate",
+        "z": "a4566cca18e41e03",
+        "name": "Publish Gate",
+        "controlTopic": "control",
+        "defaultState": "closed",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "defaultCmd": "default",
+        "statusCmd": "",
+        "persist": false,
+        "x": 890,
+        "y": 1160,
+        "wires": [
+            [
+                "46663b656f21707d"
+            ]
+        ]
+    },
+    {
+        "id": "8bfd56980ad9d6d6",
+        "type": "change",
+        "z": "a4566cca18e41e03",
+        "name": "Set RF Sensor Topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "rfSensorTopic",
+                "pt": "flow",
+                "to": "9_barbarotto/hamradio/rack01/sensors/kat500/power",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5bfd5e926cea8453",
+        "type": "change",
+        "z": "a4566cca18e41e03",
+        "name": "Set Sensor Topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "$flowContext(\"rfSensorTopic\")\t",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1730,
+        "y": 700,
+        "wires": [
+            [
+                "f2440ca499974bef"
             ]
         ]
     },
@@ -2206,11 +2731,16 @@
                 "t": "cont",
                 "v": "ON",
                 "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "SN",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 9,
+        "outputs": 10,
         "x": 610,
         "y": 560,
         "wires": [
@@ -2225,8 +2755,7 @@
             ],
             [
                 "b3ac20c3.6a62c",
-                "4d6c0be2.812c84",
-                "d38df9f4ddb228ae"
+                "4d6c0be2.812c84"
             ],
             [
                 "cb2abcd0.7d9aa"
@@ -2240,6 +2769,9 @@
             ],
             [
                 "47696baa.c4fb04"
+            ],
+            [
+                "e82fd024e6fb7fb5"
             ]
         ]
     },
@@ -2258,7 +2790,8 @@
         "y": 560,
         "wires": [
             [
-                "412051c3.d11a1"
+                "412051c3.d11a1",
+                "d38df9f4ddb228ae"
             ]
         ]
     },
@@ -2285,16 +2818,18 @@
         "type": "function",
         "z": "a639e598.c31358",
         "name": "Sby/Operate",
-        "func": "msg.payload = parseInt(msg.payload.substr(2,3))\n\nreturn msg;\n",
+        "func": "msg.payload = parseInt(msg.payload.substr(2,3))\nmsg.field=\"operate\";\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
+        "libs": [],
         "x": 830,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
-                "8224e36e.a3723"
+                "8224e36e.a3723",
+                "b3ae15f64bae2dd7"
             ]
         ]
     },
@@ -2303,14 +2838,14 @@
         "type": "function",
         "z": "a639e598.c31358",
         "name": "Watts",
-        "func": "msg.payload = parseInt(msg.payload.substr(2,3))\nif (isNaN(msg.payload)) {\n    return;   \n}  \nreturn msg;\n",
+        "func": "msg.payload = parseInt(msg.payload.substr(2,3))\nif (isNaN(msg.payload)) {\n    return;   \n}\nmsg.field=\"rf_power\";\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 620,
+        "y": 640,
         "wires": [
             [
                 "27473d2f.6df7a2",
@@ -2359,16 +2894,18 @@
         "type": "function",
         "z": "a639e598.c31358",
         "name": "Band",
-        "func": "var bandcode = msg.payload;\nvar band = '';\nswitch(bandcode) {\ncase 0:\n    band = \"160m\";\nbreak;\ncase 1:\n    band = \"80m\";\nbreak;\ncase 2:\n    band = \"60m\";\nbreak;\ncase 3:\n    band = \"40m\";\nbreak;\ncase 4:\n    band = \"30m\";\nbreak;\ncase 5:\n    band = \"20m\";\nbreak;\ncase 6:\n    band = \"17m\";\nbreak;\ncase 7:\n    band = \"15m\";\nbreak;\ncase 8:\n    band = \"12m\";\nbreak;\ncase 9:\n    band = \"10m\";\nbreak;\ncase 10:\n    band = \"6m\";\n}\n\nreturn  {payload: band};\n",
+        "func": "var bandcode = msg.payload;\nvar band = '';\nswitch(bandcode) {\ncase 0:\n    band = \"160M\";\nbreak;\ncase 1:\n    band = \"80M\";\nbreak;\ncase 2:\n    band = \"60M\";\nbreak;\ncase 3:\n    band = \"40M\";\nbreak;\ncase 4:\n    band = \"30M\";\nbreak;\ncase 5:\n    band = \"20M\";\nbreak;\ncase 6:\n    band = \"17M\";\nbreak;\ncase 7:\n    band = \"15M\";\nbreak;\ncase 8:\n    band = \"12M\";\nbreak;\ncase 9:\n    band = \"10M\";\nbreak;\ncase 10:\n    band = \"6M\";\n}\n\n\nmsg.field = 'band';\nmsg.payload = band;\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
+        "libs": [],
         "x": 1010,
         "y": 880,
         "wires": [
             [
-                "7f181584.cf1a7c"
+                "7f181584.cf1a7c",
+                "9c276771ba86adeb"
             ]
         ]
     },
@@ -2748,10 +3285,12 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
-                "71fedf06.5a64b"
+                "71fedf06.5a64b",
+                "d16487c4a750be07",
+                "ea6bf7b8291be445"
             ]
         ]
     },
@@ -3635,8 +4174,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2010,
-        "y": 140,
+        "x": 1990,
+        "y": 120,
         "wires": [
             [
                 "a47939f8.667778"
@@ -3923,8 +4462,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2060,
-        "y": 100,
+        "x": 1940,
+        "y": 60,
         "wires": [
             [
                 "2e3c12b5.1c84de"
@@ -3953,8 +4492,8 @@
         "links": [
             "60591c2d.6c93a4"
         ],
-        "x": 1935,
-        "y": 100,
+        "x": 1835,
+        "y": 60,
         "wires": [
             [
                 "ac1e4550.e52a28"
@@ -4000,24 +4539,6 @@
         "wires": []
     },
     {
-        "id": "88b03005584e7043",
-        "type": "mqtt out",
-        "z": "a639e598.c31358",
-        "name": "",
-        "topic": "9_barbarotto/hamradio/rack01/sensors/kpa500/power",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "a9add877a0594643",
-        "x": 1800,
-        "y": 600,
-        "wires": []
-    },
-    {
         "id": "32f7c9af25ebee31",
         "type": "rbe",
         "z": "a639e598.c31358",
@@ -4033,7 +4554,8 @@
         "y": 600,
         "wires": [
             [
-                "88b03005584e7043"
+                "9c276771ba86adeb",
+                "01e5b5ca12253607"
             ]
         ]
     },
@@ -4140,8 +4662,8 @@
         "id": "d38df9f4ddb228ae",
         "type": "debug",
         "z": "a639e598.c31358",
-        "name": "KPA500 SWR",
-        "active": true,
+        "name": "KPA500 Input",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -4149,8 +4671,351 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 480,
-        "y": 780,
+        "x": 460,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "6cf5fd4918d29a07",
+        "type": "mqtt out",
+        "z": "a639e598.c31358",
+        "name": "Publish KPA500",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a9add877a0594643",
+        "x": 1060,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "9c276771ba86adeb",
+        "type": "function",
+        "z": "a639e598.c31358",
+        "name": "Pub Payload",
+        "func": "const baseTopic = flow.get('baseTopic');\nconst serial = flow.get('unitSerial');\n\nconst fieldName = msg.field + 'Value';\nconst prevValue = flow.get(fieldName)\nif(msg.payload != prevValue){\n    flow.set(fieldName, msg.payload);\n    msg.topic = baseTopic + '/' + serial + '/' + msg.field; \n    return msg;  \n}\n\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 1260,
+        "wires": [
+            [
+                "41413d64e32cd18f",
+                "15c5268fc9e55833"
+            ]
+        ]
+    },
+    {
+        "id": "41413d64e32cd18f",
+        "type": "debug",
+        "z": "a639e598.c31358",
+        "name": "Pub Out",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "e40b451a7fda021e",
+        "type": "change",
+        "z": "a639e598.c31358",
+        "name": "Set Base Device Topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "baseTopic",
+                "pt": "flow",
+                "to": "9_barbarotto/hamradio/elecraft/kpa500",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "930426c91566a7db",
+        "type": "inject",
+        "z": "a639e598.c31358",
+        "name": "Startup",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 240,
+        "y": 140,
+        "wires": [
+            [
+                "e40b451a7fda021e",
+                "527594306fe88056",
+                "386677c5e2022b23"
+            ]
+        ]
+    },
+    {
+        "id": "b3ae15f64bae2dd7",
+        "type": "change",
+        "z": "a639e598.c31358",
+        "name": "Convert Operate Value",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "1",
+                "fromt": "num",
+                "to": "true",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "0",
+                "fromt": "num",
+                "to": "false",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 600,
+        "wires": [
+            [
+                "9c276771ba86adeb"
+            ]
+        ]
+    },
+    {
+        "id": "527594306fe88056",
+        "type": "function",
+        "z": "a639e598.c31358",
+        "name": "Reset flow variables",
+        "func": "\n// Get all keys (names) of variables in the 'default' flow context store (usually memory)\nlet keys = flow.keys(\"default\");\n\n// Loop through and delete each variable\nfor (let i = 0; i < keys.length; i++) {\n    if(keys[i].endsWith(\"Value\")){\n        flow.set(keys[i], undefined, \"default\");\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e82fd024e6fb7fb5",
+        "type": "function",
+        "z": "a639e598.c31358",
+        "name": "Serial",
+        "func": "var serial = msg.payload.slice(2);\nflow.set(\"unitSerial\", serial);\nmsg.payload = \"open\";\nmsg.topic = \"control\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1120,
+        "wires": [
+            [
+                "15c5268fc9e55833"
+            ]
+        ]
+    },
+    {
+        "id": "82b220bdcb0be581",
+        "type": "inject",
+        "z": "a639e598.c31358",
+        "name": "Serial Query",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": ".5",
+        "topic": "",
+        "payload": ";^SN;",
+        "payloadType": "str",
+        "x": 2550,
+        "y": 140,
+        "wires": [
+            [
+                "949bfe7e.3c218"
+            ]
+        ]
+    },
+    {
+        "id": "15c5268fc9e55833",
+        "type": "gate",
+        "z": "a639e598.c31358",
+        "name": "Publish Gate",
+        "controlTopic": "control",
+        "defaultState": "closed",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "defaultCmd": "default",
+        "statusCmd": "",
+        "persist": false,
+        "x": 850,
+        "y": 1260,
+        "wires": [
+            [
+                "6cf5fd4918d29a07"
+            ]
+        ]
+    },
+    {
+        "id": "386677c5e2022b23",
+        "type": "change",
+        "z": "a639e598.c31358",
+        "name": "Set RF Sensor Topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "rfSensorTopic",
+                "pt": "flow",
+                "to": "9_barbarotto/hamradio/rack01/sensors/kpa500/power",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "01e5b5ca12253607",
+        "type": "change",
+        "z": "a639e598.c31358",
+        "name": "Set Sensor Topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "$flowContext(\"rfSensorTopic\")\t",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1690,
+        "y": 600,
+        "wires": [
+            [
+                "15c5268fc9e55833"
+            ]
+        ]
+    },
+    {
+        "id": "ea6bf7b8291be445",
+        "type": "switch",
+        "z": "a639e598.c31358",
+        "name": "OP/STBY",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1500,
+        "y": 200,
+        "wires": [
+            [
+                "2b02985a.f02a38"
+            ],
+            [
+                "9ddf7442.4a04a8"
+            ]
+        ]
+    },
+    {
+        "id": "53b738d5bcd38ca6",
+        "type": "rbe",
+        "z": "a639e598.c31358",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 1330,
+        "y": 200,
+        "wires": [
+            [
+                "ea6bf7b8291be445"
+            ]
+        ]
+    },
+    {
+        "id": "d16487c4a750be07",
+        "type": "debug",
+        "z": "a639e598.c31358",
+        "name": "Stby Mode",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 500,
         "wires": []
     },
     {
@@ -5912,7 +6777,7 @@
             },
             {
                 "t": "cont",
-                "v": "/main_fan",
+                "v": "/mainfan",
                 "vt": "str"
             }
         ],
@@ -6032,6 +6897,7 @@
         "id": "2cb81c3b5d3140f1",
         "type": "ui_template",
         "z": "9c3536b7a4c3ebc0",
+        "d": true,
         "group": "b0581f70dc209f89",
         "name": "Header Styling",
         "order": 2,
@@ -6053,6 +6919,7 @@
         "id": "53e99c24b01c38c4",
         "type": "ui_text",
         "z": "9c3536b7a4c3ebc0",
+        "d": true,
         "group": "b0581f70dc209f89",
         "order": 1,
         "width": "6",
@@ -6117,6 +6984,156 @@
         "x": 980,
         "y": 560,
         "wires": []
+    },
+    {
+        "id": "04db832b6e91d1bb",
+        "type": "mqtt in",
+        "z": "9c3536b7a4c3ebc0",
+        "name": "",
+        "topic": "9_barbarotto/hamradio/flexradio/radios/+/mox",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "a9add877a0594643",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 270,
+        "y": 580,
+        "wires": [
+            [
+                "e461c374b328367f"
+            ]
+        ]
+    },
+    {
+        "id": "4e208f7bd13494ec",
+        "type": "function",
+        "z": "9c3536b7a4c3ebc0",
+        "name": "Set Global PTT",
+        "func": "global.set(\"ptt\", msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e461c374b328367f",
+        "type": "change",
+        "z": "9c3536b7a4c3ebc0",
+        "name": "Convert Bool Values",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "true",
+                "fromt": "str",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "false",
+                "fromt": "str",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 580,
+        "wires": [
+            [
+                "4e208f7bd13494ec"
+            ]
+        ]
+    },
+    {
+        "id": "58efaf8841b9c6a7",
+        "type": "ui_button",
+        "z": "9c3536b7a4c3ebc0",
+        "name": "Title",
+        "group": "b0581f70dc209f89",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "<font color = {{msg.font}} size=\"3\">Flex 6600",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.color}}",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 1130,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c7b7c8a0a5740d5c",
+        "type": "inject",
+        "z": "9c3536b7a4c3ebc0",
+        "name": ".5 sec",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": ".2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 750,
+        "y": 140,
+        "wires": [
+            [
+                "373f5e98c9c42ff9"
+            ]
+        ]
+    },
+    {
+        "id": "373f5e98c9c42ff9",
+        "type": "function",
+        "z": "9c3536b7a4c3ebc0",
+        "name": "",
+        "func": "ptt = global.get('ptt');\nif(ptt === true){\n    msg.color = \"red\";\n    msg.font = \"white\"\n}else{\n    msg.font = \"#66ff66\";\n    msg.color = \"#404040\";\n}\nmsg.payload = \"\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 120,
+        "wires": [
+            [
+                "58efaf8841b9c6a7"
+            ]
+        ]
     },
     {
         "id": "f2f54a8da6374fe1",
